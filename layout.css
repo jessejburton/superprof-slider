@@ -1,0 +1,111 @@
+/* BASE STYLES and RESETS */
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  
+  html {
+    font-size: 62.5%;
+  }
+  
+  body {
+    font-size: 1.8rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  
+  .myThumbnails { 
+    flex : 1;
+    flex-direction: row;
+  }
+  
+  .wrapper {
+    width: 100rem;
+    margin: 0 auto;
+  }
+  
+
+  /* FLEX 
+  .container {
+    width: 1000px;
+    min-height: 500px;
+    margin: 50px auto;
+    background-color: blue;
+    display: flex;
+}
+
+.tabs {
+    background-color: green;
+    width: 30%;
+}
+
+.slideshow {
+    background-color: red;
+    flex-grow: 1;
+}*/
+
+/* GRID */
+.container {
+    width: 1000px;
+    min-height: 500px;
+    margin: 50px auto;
+    background-color: blue;
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+
+.tabs {
+    background-color: green;
+}
+
+.slideshow {
+    background-color: red;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: column;
+}
+
+.tab {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.tab:hover {
+    background-color: yellow;
+}
+
+.thumbnails {
+    position: relative;
+    background-color: #666;
+    height: 15rem;
+    width: 100%;
+    overflow: hidden;
+}
+
+
+.thumbnails-list {
+    display: grid;
+    list-style: none;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    position: relative;
+    transition: all .5s ease;
+}
+
+.thumbnail {
+    position: relative;
+    width: 15rem;
+    height: 15rem;
+    margin: 1rem;
+}
+
+.thumbnail.active img {
+    border: 4px solid blue;
+}
+
+.thumbnail img {
+    width: 100%;
+}

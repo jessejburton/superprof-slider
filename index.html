@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Slider</title>
+
+  <link href="slideshow.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+  <div class="wrapper">
+
+    <!-- Slideshow container -->
+    <div class="slideshow-container">
+
+        <!-- Tabs -->
+        <div id="tabs" class="tabs"></div>
+        <div class ="slideshow">
+          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <div id= "slides" >
+              <div class="loading">Loading...</div>
+            </div>
+          <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+      <!-- Next and previous buttons -->
+      
+      
+
+    </div>
+
+    <!-- The Gallery -->
+    <div class="gallery-container" id="gallery">
+        <span class="button-container"><a class="prev" onclick="plusSlides(-1)">&#10094;</a></span>
+        <ul id="thumbnails-list">
+          <div class="loading">Loading...</div>
+        </ul>
+        <span class="button-container"><a class="next" onclick="plusSlides(1)">&#10095;</a></span>
+      </div>
+
+  </div>
+
+  <script src="slideshow.js"></script>
+
+</body>
+
+</html>
