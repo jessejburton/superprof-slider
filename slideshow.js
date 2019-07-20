@@ -43,16 +43,20 @@ var slideGroups = [
 
 // Next/previous controls
 function plusSlides(n) {
-  console.log({slideIndex, n}, slideIndex+=n);
-  showSlides(slideIndex += n);
-  showGallery(slideIndex += n);
+  slideIndex = (slideIndex + n)%document.querySelectorAll(".mySlides").length;
+  var shift = slideIndex
+  showSlides(shift);
+  showGallery(shift);
 }
 
 // Thumbnail image controls
 function currentSlide(n) {
-  showSlides(slideIndex = n);
+  slideIndex = n;
+  shift = slideIndex;
+  showSlides(shift);
 }
 
+/*Load new active image*/
 function showSlides(n) {
   var slides = document.querySelectorAll(".mySlides");
   //var dots = document.querySelectorAll(".dot");
@@ -66,7 +70,6 @@ function showSlides(n) {
   })
    
   slides[slideIndex - 1].style.display = "block";
-  //dots[slideIndex - 1].className += " active";
 }
 
 function showGallery(n) {
@@ -74,23 +77,29 @@ function showGallery(n) {
   thumbnails = [];
   var index = n;
 
-  slides.forEach((slide) => {
-    slide.removeAttribute("id");
-    slide.style.display = "none"
-    slide.setAttribute("onclick", `currentSlide(${index})`);
-    index++;
-  })
+  slides.forEach((slide) => { slide.style.display = "none"});
 
+  console.log("gallery:", {n})
   //1. get array of 5 images
   if ((n-3) < 0) { 
-    //thumbnails = slides.slice(0, n+2).concat(slides.slice(n-3));
+    console.log("A");
     thumbnails = slides.slice(n-3).concat(slides.slice(0, n+2));
+    thumbnails.forEach(t => { console.log(t.innerHTML)});
+    check(thumbnails);
   }
-  else if ((n + 2) > slides.length) {
-    thumbnails = slides.slice((n-3, slides.length)).concat(slides.slice(slides.length - n));
+  else if ((n + 2) > slides.length) { //FIX ME!!
+    thumbnails = slides.slice((n-3, (slides.length - 1))).concat(slides.slice(0, ((n+2)-slides.length)));
+
+    console.log("B");
+    console.log("first half:", slides.slice(n-3, (slides.length - 1)).length, "second half:", slides.slice((n+2)-slides.length).length);
+    thumbnails.forEach(t => { console.log(t.innerHTML)});
+    check(thumbnails);
   }
   else { 
+    console.log("C");
     thumbnails = slides.slice((n-3), (n+2));
+    thumbnails.forEach(t => { console.log(t.innerHTML)});
+    check(thumbnails);
   }
 
   index = 0;
@@ -102,6 +111,12 @@ function showGallery(n) {
     thumbnail.style.display = "block";
     index++;
   })
+}
+
+function check(array) {
+  if (array.length != 5) {
+    console.log("ALERT", {slideIndex});
+  }
 }
 
 /* Tabs */
@@ -127,6 +142,7 @@ function showTabs(data) {
 }
 showTabs(slideGroups);
 
+/*Load image gallery */
 function loadGallery(i) {
   var thumbnails = slideGroups[i].images;
   var galleryHTML = document.createElement('ul');
@@ -168,25 +184,9 @@ function loadSlides(i) {    // i = desired project tab
     img.src = slide;
     s.append(img);
     slideHTML.append(s); //<div class="mySlides fade">$img</div>
-/*
-    var t = document.createElement("div");
-    t.classList.add("column");
-    t.classList.add('thumbnail');
-    t.classList.add('fade');
-
-    var img = document.createElement("img");
-    img.setAttribute("id", "thumbnail");
-    img.src = slide;
-    t.append(img);
-    thumbHTML.append(t);
-
-*/
   });
 
   document.getElementById("slides").innerHTML = slideHTML.innerHTML;
-  //document.getElementById("gallery").innerHTML = thumbHTML.innerHTML;
-  //showGallery(slideIndex);
-  //showDots(slides);
   showSlides(slideIndex);
 }
 
