@@ -1,0 +1,189 @@
+/* . = class
+/* # = id
+*/
+
+/* BASE STYLES and RESETS */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.8rem;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+
+#thumbnails-list {
+  display: flex;
+  flex-direction: row;
+  transition: all .5s ease;
+}
+
+.myThumbnails { 
+  position: relative;
+  flex: 1;
+  height: 15rem;
+  width: 15rem;
+  margin: 1rem;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.myThumbnails#one {
+  order: 1;
+}
+.myThumbnails#two {
+  order: 2;
+}
+.myThumbnails#three {
+  order: 3
+}
+.myThumbnails#four {
+  order: 4
+}
+.myThumbnails#five {
+  order: 5
+}
+
+.wrapper {
+  width: 100rem;
+  margin: 0 auto;
+}
+
+/* TAB STYLES */
+.tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.tab {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  text-transform: uppercase;
+  color: #2d8edf;
+  cursor: pointer;
+}
+
+
+.tab.active, .tab:hover {
+  background-color: #2d8edf;
+  color: white;
+}
+
+.gallery-container {
+  display: grid;
+  grid-template-columns: 3% 94% 3%;
+  position: relative;
+  height: 15rem;
+  width: 100%;
+}
+
+/* Slideshow container */
+.slideshow-container {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  min-height: 500px;
+  margin: 25px auto;
+  position: relative;
+  margin: auto;
+}
+
+.slideshow {
+  height: 55rem;
+}
+
+#slides {
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+}
+
+.mySlides img {
+  height: -moz-available;
+  height: -webkit-fill-available;
+  height: fill-available;
+}
+
+/* Next & previous buttons */
+
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: red;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active,
+.dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+
+@keyframes fade {
+  0% {
+    opacity: .4
+  }
+
+
+  100% {
+    opacity: 1
+  }
+}
