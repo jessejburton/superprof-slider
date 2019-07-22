@@ -1,4 +1,4 @@
-const arr = [
+var arr = [
   'images/StrangemorePHOTO-8299.jpg',
   'images/StrangemorePHOTO-8304.jpg',
   'images/StrangemorePHOTO-8306.jpg',
