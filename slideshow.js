@@ -3,7 +3,22 @@ var slideIndex = 1;
 
 var slideGroups = [
   {
-    title: 'Project 1',
+    title: 'Restaurants',
+    images: [
+      'slideshow/restaurants/brewers_dining_tv.jpg',
+      'slideshow/restaurants/brewers_entrance_indoor.jpg',
+      'slideshow/restaurants/brewers_entrance_view.jpg',
+      'slideshow/restaurants/mariott_bar.jpg',
+      'slideshow/restaurants/brewers_entrance_outdoor.jpg',
+      'slideshow/restaurants/generic.jpg',
+      'slideshow/restaurants/generic.jpg',
+      'slideshow/restaurants/generic.jpg',
+      'slideshow/restaurants/generic.jpg',
+      'slideshow/restaurants/generic.jpg'
+    ]
+  },
+  {
+    title: 'Hotels',
     images: [
       'images/StrangemorePHOTO-8299.jpg',
       'images/StrangemorePHOTO-8304.jpg',
@@ -15,7 +30,7 @@ var slideGroups = [
     ]
   },
   {
-    title: 'Project 2',
+    title: 'Renovations',
     images: [
       'images/IMG_2460.JPG',
       'images/IMG_2462.JPG',
@@ -23,7 +38,7 @@ var slideGroups = [
     ]
   },
   {
-    title: 'Project 3',
+    title: 'Additions',
     images: [
       'images/11-12-14 3 Brewers 019.jpg',
       'images/11-12-14 3 Brewers 034.jpg',
@@ -34,11 +49,23 @@ var slideGroups = [
     ]
   },
   {
-    title: 'Project 4',
+    title: 'Office',
     images: [
       'images/11-12-14 3 Brewers 019.jpg',
     ]
-  }
+  },
+  {
+  title: 'Fit-Outs',
+  images: [
+    'images/11-12-14 3 Brewers 019.jpg',
+  ]
+  },
+  {
+  title: 'Design Build',
+  images: [
+    'images/11-12-14 3 Brewers 019.jpg',
+  ]
+}
 ]
 
 // Next/previous controls
@@ -54,6 +81,27 @@ function currentSlide(n) {
   slideIndex = n;
   shift = slideIndex;
   showSlides(shift);
+}
+
+function scrollL(){
+  var shift = slideIndex - 4;
+  console.log({shift},{slideIndex});
+  if (shift < 0){
+    shift += document.querySelectorAll(".mySlides").length 
+  }
+  console.log({shift},{slideIndex});
+  showGallery(slideIndex=shift);
+}
+
+function scrollR(){
+  var shift = slideIndex + 4;
+  var len = document.querySelectorAll(".mySlides").length;
+
+  if (shift > len){
+    shift -= len;
+  }
+
+  showGallery(slideIndex=shift);
 }
 
 /*Load new active image*/
@@ -73,51 +121,42 @@ function showSlides(n) {
 }
 
 function showGallery(n) {
-  slides = [].slice.call(document.querySelectorAll(".myThumbnails")); 
-  thumbnails = [];
+
+  // slides.forEach(s => {console.log (s.innerHTML)}); 
+
+  var slides = [].slice.call(document.querySelectorAll(".myThumbnails"));
+  var len = slides.length; 
+  var thumbnails = [];
   var index = n;
 
   slides.forEach((slide) => { slide.style.display = "none"});
 
-  console.log("gallery:", {n})
-  //1. get array of 5 images
-  if ((n-3) < 0) { 
-    console.log("A");
-    thumbnails = slides.slice(n-3).concat(slides.slice(0, n+2));
-    thumbnails.forEach(t => { console.log(t.innerHTML)});
-    check(thumbnails);
-  }
-  else if ((n + 2) > slides.length) { //FIX ME!!
-    thumbnails = slides.slice((n-3, (slides.length - 1))).concat(slides.slice(0, ((n+2)-slides.length)));
+  console.log("gallery:", {n}) //PRINT OUT
 
-    console.log("B");
-    console.log("first half:", slides.slice(n-3, (slides.length - 1)).length, "second half:", slides.slice((n+2)-slides.length).length);
-    thumbnails.forEach(t => { console.log(t.innerHTML)});
-    check(thumbnails);
+  //1. get array of 5 images
+  if ((n-3) < 0) {
+    console.log("a"); 
+    thumbnails = slides.slice(n-3).concat(slides.slice(0, n+2));
+  }
+  else if ((n+2) > len) {
+    console.log("b");
+    thumbnails = slides.slice(n-3).concat(slides.slice(0, ((n+1) - (len-1))));
   }
   else { 
-    console.log("C");
+    console.log("b");
     thumbnails = slides.slice((n-3), (n+2));
-    thumbnails.forEach(t => { console.log(t.innerHTML)});
-    check(thumbnails);
   }
 
   index = 0;
   order = ["one", "two", "three", "four", "five"];
 
   thumbnails.forEach((thumbnail) => {
-    //console.log(thumbnail.innerHTML);
     thumbnail.setAttribute("id", `${order[index]}`);
     thumbnail.style.display = "block";
     index++;
   })
 }
 
-function check(array) {
-  if (array.length != 5) {
-    console.log("ALERT", {slideIndex});
-  }
-}
 
 /* Tabs */
 function showTabs(data) {
@@ -152,10 +191,11 @@ function loadGallery(i) {
     var t = document.createElement('li');
     t.classList.add('myThumbnails');
     t.classList.add('fade');
-    t.setAttribute("onclick", `currentSlide(${index})`);
+    t.setAttribute("onclick", `currentSlide(${index+1})`);
 
     var img = document.createElement('img');
-    img.style.width = "100%";
+    img.style.width = "100%"
+    img.style.objectFit = "fill";
     img.src = thumbnail;
     t.append(img);
     galleryHTML.append(t);
@@ -180,7 +220,6 @@ function loadSlides(i) {    // i = desired project tab
     s.classList.add('fade');      //used later for css
 
     var img = document.createElement("img");
-    img.style.width = "100%";
     img.src = slide;
     s.append(img);
     slideHTML.append(s); //<div class="mySlides fade">$img</div>

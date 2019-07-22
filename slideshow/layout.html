@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Layout</title>
+  <link href="layout.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <div class="container">
+      <div class="tabs">
+        <div class="tab"><span>HOTEL</span></div>
+        <div class="tab"><span>ADDITIONS</span></div>
+        <div class="tab"><span>BUILD-OUT</span></div>
+        <div class="tab"><span>RENOVATIONS</span></div>
+      </div>
+      <div class="slideshow">SLIDESHOW</div>
+    </div>
+
+    <div class="thumbnails-container">
+
+      <div class="thumbnails">
+
+        <div class="thumbnail"><span></span></div>
+        <div class="thumbnail"><span></span></div>
+        <div class="thumbnail active"><span></span></div>
+        <div class="thumbnail"><span></span></div>
+        <div class="thumbnail"><span></span></div>
+
+      </div>
+
+    </div>
+
+    <div class="buttons">
+      <button onClick="shiftLeft()">LEFT</button>
+      <button onClick="shiftRight()">RIGHT</button>
+    </div>
+  </div>
+
+  <button onClick="moveRight()">Click</button>
+
+  <script src="layout.js"></script>
+
+</body>
+
+</html>
