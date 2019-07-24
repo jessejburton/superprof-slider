@@ -55,22 +55,22 @@ var slideGroups = [
     ]
   },
   {
-  title: 'Fit-Outs',
-  images: [
-    'images/11-12-14 3 Brewers 019.jpg',
-  ]
+    title: 'Fit-Outs',
+    images: [
+      'images/11-12-14 3 Brewers 019.jpg',
+    ]
   },
   {
-  title: 'Design Build',
-  images: [
-    'images/11-12-14 3 Brewers 019.jpg',
-  ]
-}
+    title: 'Design Build',
+    images: [
+      'images/11-12-14 3 Brewers 019.jpg',
+    ]
+  }
 ]
 
 // Next/previous controls
 function plusSlides(n) {
-  slideIndex = (slideIndex + n)%document.querySelectorAll(".mySlides").length;
+  slideIndex = (slideIndex + n) % document.querySelectorAll(".mySlides").length;
   var shift = slideIndex
   showSlides(shift);
   showGallery(shift);
@@ -83,25 +83,25 @@ function currentSlide(n) {
   showSlides(shift);
 }
 
-function scrollL(){
+function scrollL() {
   var shift = slideIndex - 4;
-  console.log({shift},{slideIndex});
-  if (shift < 0){
-    shift += document.querySelectorAll(".mySlides").length 
+  console.log({ shift }, { slideIndex });
+  if (shift < 0) {
+    shift += document.querySelectorAll(".mySlides").length
   }
-  console.log({shift},{slideIndex});
-  showGallery(slideIndex=shift);
+  console.log({ shift }, { slideIndex });
+  showGallery(slideIndex = shift);
 }
 
-function scrollR(){
+function scrollR() {
   var shift = slideIndex + 4;
   var len = document.querySelectorAll(".mySlides").length;
 
-  if (shift > len){
+  if (shift > len) {
     shift -= len;
   }
 
-  showGallery(slideIndex=shift);
+  showGallery(slideIndex = shift);
 }
 
 /*Load new active image*/
@@ -116,35 +116,35 @@ function showSlides(n) {
   slides.forEach((slide) => {
     slide.style.display = "none";
   })
-   
+
   slides[slideIndex - 1].style.display = "block";
 }
 
 function showGallery(n) {
 
-  // slides.forEach(s => {console.log (s.innerHTML)}); 
+  // slides.forEach(s => {console.log (s.innerHTML)});
 
   var slides = [].slice.call(document.querySelectorAll(".myThumbnails"));
-  var len = slides.length; 
+  var len = slides.length;
   var thumbnails = [];
   var index = n;
 
-  slides.forEach((slide) => { slide.style.display = "none"});
+  slides.forEach((slide) => { slide.style.display = "none" });
 
-  console.log("gallery:", {n}) //PRINT OUT
+  console.log("gallery:", { n }) //PRINT OUT
 
   //1. get array of 5 images
-  if ((n-3) < 0) {
-    console.log("a"); 
-    thumbnails = slides.slice(n-3).concat(slides.slice(0, n+2));
+  if ((n - 3) < 0) {
+    console.log("a");
+    thumbnails = slides.slice(n - 3).concat(slides.slice(0, n + 2));
   }
-  else if ((n+2) > len) {
+  else if ((n + 2) > len) {
     console.log("b");
-    thumbnails = slides.slice(n-3).concat(slides.slice(0, ((n+1) - (len-1))));
+    thumbnails = slides.slice(n - 3).concat(slides.slice(0, ((n + 1) - (len - 1))));
   }
-  else { 
+  else {
     console.log("b");
-    thumbnails = slides.slice((n-3), (n+2));
+    thumbnails = slides.slice((n - 3), (n + 2));
   }
 
   index = 0;
@@ -191,11 +191,11 @@ function loadGallery(i) {
     var t = document.createElement('li');
     t.classList.add('myThumbnails');
     t.classList.add('fade');
-    t.setAttribute("onclick", `currentSlide(${index+1})`);
+    t.setAttribute("onclick", `currentSlide(${index + 1})`);
 
     var img = document.createElement('img');
     img.style.width = "100%"
-    img.style.objectFit = "fill";
+    img.style.objectFit = "contain";
     img.src = thumbnail;
     t.append(img);
     galleryHTML.append(t);
@@ -204,12 +204,12 @@ function loadGallery(i) {
   })
 
   document.getElementById('thumbnails-list').innerHTML = galleryHTML.innerHTML;
-  
+
   showGallery(slideIndex);
 };
 
 /* Load slides */
-function loadSlides(i) {    // i = desired project tab 
+function loadSlides(i) {    // i = desired project tab
   var slides = slideGroups[i].images;
   var slideHTML = document.createElement('div');
   var thumbHTML = document.createElement('div');
@@ -242,7 +242,7 @@ tabs.forEach((tab) => {
     });
 
     // Update the slideshow
-    slideIndex  = 1;
+    slideIndex = 1;
     loadSlides(show);
     loadGallery(show);
 
