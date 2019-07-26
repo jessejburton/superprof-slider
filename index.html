@@ -20,27 +20,18 @@
       <!-- Tabs -->
       <div id="tabs" class="tabs"></div>
 
-      <div class="slideshow">
-
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-
-        <div id="slides">
-          <div class="loading">Loading...</div>
-        </div>
-
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
+      <!-- Slides -->
+      <div class="slides">
+        <!--<a class="prev" onclick="plusSlides(-1)">&#10094;</a>-->
+        <div id="slide"></div>
+        <!--<a class="next" onclick="plusSlides(1)">&#10095;</a>-->
       </div>
 
       <!-- The Gallery -->
       <div class="gallery-container" id="gallery">
         <span class="button-container"><a class="prev" onclick="scrollL()">&#10094;&#10094;</a></span>
-        <div id="thumbnails-list">
-          <div class="thumbnail"><span></span></div>
-          <div class="thumbnail"><span></span></div>
-          <div class="thumbnail active"><span></span></div>
-          <div class="thumbnail"><span></span></div>
-          <div class="thumbnail"><span></span></div>
+        <div id="thumbnails-list" class="thumbnails-list">
+          <div class="loading">Loading...</div>
         </div>
         <span class="button-container"><a class="next" onclick="scrollR()">&#10095;&#10095;</a></span>
       </div>

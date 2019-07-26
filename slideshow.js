@@ -1,7 +1,5 @@
-
-var slideIndex = 1;
-
-var slideGroups = [
+const NUMBER_SLIDES = 5;
+const SLIDE_DATA = [
   {
     title: 'Restaurants',
     images: [
@@ -66,61 +64,110 @@ var slideGroups = [
       'images/11-12-14 3 Brewers 019.jpg',
     ]
   }
-]
+];
+var currentSlide = 0;
 
-// Next/previous controls
-function plusSlides(n) {
-  slideIndex = (slideIndex + n) % document.querySelectorAll(".mySlides").length;
-  var shift = slideIndex
-  showSlides(shift);
-  showGallery(shift);
+/* INIT */
+const init = () => {
+  loadTabs(SLIDE_DATA);
+  //loadSlides(0);
+  loadGallery(SLIDE_DATA[currentSlide]);
+};
+init();
+
+/* TABS */
+function loadTabs(data) {
+  const tabs = document.getElementById("tabs");
+  var index = 0;
+
+  // Loop through each tab and add the data
+  data.forEach((tab) => {
+    const t = document.createElement("div");
+    t.classList.add("tab");
+    t.setAttribute("data-show", index);
+    t.innerHTML = tab.title;
+
+    tabs.append(t); // <div class="tab" data-show="$index">tab.title</div>
+
+    index++;
+  });
+
+  tabs.firstChild.classList.add("active"); // Make the first tab active
 }
 
-// Thumbnail image controls
-function currentSlide(n) {
-  slideIndex = n;
-  shift = slideIndex;
-  showSlides(shift);
+/* GALLERY */
+function loadGallery(data) {
+  const thumbnails = data.images;
+  const galleryUl = document.createElement('ul');
+  var index = 0;
+
+  thumbnails.forEach((thumbnail) => {
+    var t = document.createElement('li');
+    t.classList.add('thumbnail');
+    t.classList.add('fade');
+    t.setAttribute("onclick", `currentSlide(${index + 1})`);
+
+    const img = document.createElement('img');
+    img.classList.add('thumbnail-image');
+    img.src = thumbnail;
+    t.append(img);
+    galleryUl.append(t);
+
+    if (index == 2) t.classList.add('active'); /* !!! Make this dynamic */
+
+    index++;
+  })
+
+  document.getElementById('thumbnails-list').innerHTML = galleryUl.innerHTML;
+  showSlide(data.images[0]); // Show the first slide in the gallery
+};
+
+
+
+
+
+/* HELPERS */
+
+// Return an array of images
+function getGalleryImages(index) {
+  return SLIDE_DATA[index].images;
 }
 
-function scrollL() {
-  var shift = slideIndex - 4;
-  console.log({ shift }, { slideIndex });
-  if (shift < 0) {
-    shift += document.querySelectorAll(".mySlides").length
-  }
-  console.log({ shift }, { slideIndex });
-  showGallery(slideIndex = shift);
+// Show the selected image
+function showSlide(src) {
+  const slide = document.getElementById('slide');
+  const img = document.createElement('img');
+  img.src = src;
+
+  slide.innerHTML = img.outerHTML;
 }
 
-function scrollR() {
-  var shift = slideIndex + 4;
-  var len = document.querySelectorAll(".mySlides").length;
 
-  if (shift > len) {
-    shift -= len;
-  }
 
-  showGallery(slideIndex = shift);
-}
 
-/*Load new active image*/
+
+
+
+
+
+
+/* SLIDES */
 function showSlides(n) {
-  var slides = document.querySelectorAll(".mySlides");
-  //var dots = document.querySelectorAll(".dot");
+  const slides = document.querySelectorAll(".slide");
+  console.log(slides);
 
-  if (n > slides.length) { slideIndex = 1 } //snap to beginning of slideshow
+  if (n > slides.length) { currentSlide = 1 } //snap to beginning of slideshow
 
-  if (n < 1) { slideIndex = slides.length } //fell off the end, show final slide
+  if (n < 1) { currentSlide = slides.length } //fell off the end, show final slide
 
   slides.forEach((slide) => {
     slide.style.display = "none";
   })
 
-  slides[slideIndex - 1].style.display = "block";
+  slides[currentSlide].style.display = "block";
 }
 
-function showGallery(n) {
+/*function loadGallery(n) {
 
   // slides.forEach(s => {console.log (s.innerHTML)});
 
@@ -156,81 +203,21 @@ function showGallery(n) {
     index++;
   })
 }
+*/
 
 
-/* Tabs */
-function showTabs(data) {
-  var tabs = document.getElementById("tabs");
-  var tabsHTML = document.createElement("div");
-  var index = 0;
 
-  data.forEach((tab) => {
-    const t = document.createElement("div");
-    t.classList.add("tab");
-    t.setAttribute("data-show", index);
-    t.innerHTML = tab.title;
 
-    tabsHTML.append(t); //<div class="tab" data-show="$index">tab.title</div>
 
-    index++;
-  });
 
-  tabsHTML.firstChild.classList.add("active");
-  tabs.innerHTML = tabsHTML.innerHTML; //adds newly created html tabs into the same parent div
 
-}
-showTabs(slideGroups);
 
-/*Load image gallery */
-function loadGallery(i) {
-  var thumbnails = slideGroups[i].images;
-  var galleryHTML = document.createElement('ul');
-  index = 0;
 
-  thumbnails.forEach((thumbnail) => {
-    var t = document.createElement('li');
-    t.classList.add('myThumbnails');
-    t.classList.add('fade');
-    t.setAttribute("onclick", `currentSlide(${index + 1})`);
 
-    var img = document.createElement('img');
-    img.style.width = "100%"
-    img.style.objectFit = "contain";
-    img.src = thumbnail;
-    t.append(img);
-    galleryHTML.append(t);
+/* CONTROLS */
 
-    index++;
-  })
-
-  document.getElementById('thumbnails-list').innerHTML = galleryHTML.innerHTML;
-
-  showGallery(slideIndex);
-};
-
-/* Load slides */
-function loadSlides(i) {    // i = desired project tab
-  var slides = slideGroups[i].images;
-  var slideHTML = document.createElement('div');
-  var thumbHTML = document.createElement('div');
-
-  slides.forEach((slide) => {
-    var s = document.createElement("div");
-    s.classList.add('mySlides');    //sets images to active, used in showSlides
-    s.classList.add('fade');      //used later for css
-
-    var img = document.createElement("img");
-    img.src = slide;
-    s.append(img);
-    slideHTML.append(s); //<div class="mySlides fade">$img</div>
-  });
-
-  document.getElementById("slides").innerHTML = slideHTML.innerHTML;
-  showSlides(slideIndex);
-}
-
-/*    Build the Slideshow    */
-var tabs = document.querySelectorAll('.tab');
+/* TAB CONTROLS
+const tabs = document.querySelectorAll('.tab');
 tabs.forEach((tab) => {
   tab.addEventListener("click", (el) => {
     var element = el.target;
@@ -242,14 +229,48 @@ tabs.forEach((tab) => {
     });
 
     // Update the slideshow
-    slideIndex = 1;
+    currentSlide = 0;
     loadSlides(show);
     loadGallery(show);
 
     // Add the active class
     element.classList.add('active');
   })
-});
+});*/
 
-loadSlides(0);
-loadGallery(0);
+
+// Next/previous controls
+function plusSlides(n) {
+  currentSlide = (currentSlide + n) % document.querySelectorAll(".mySlides").length;
+  var shift = currentSlide
+  showSlides(shift);
+  loadGallery(shift);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  currentSlide = n;
+  shift = currentSlide;
+  showSlides(shift);
+}
+
+function scrollL() {
+  var shift = currentSlide - 4;
+  console.log({ shift }, { currentSlide });
+  if (shift < 0) {
+    shift += document.querySelectorAll(".mySlides").length
+  }
+  console.log({ shift }, { currentSlide });
+  loadGallery(currentSlide = shift);
+}
+
+function scrollR() {
+  var shift = currentSlide + 4;
+  var len = document.querySelectorAll(".mySlides").length;
+
+  if (shift > len) {
+    shift -= len;
+  }
+
+  loadGallery(currentSlide = shift);
+}
