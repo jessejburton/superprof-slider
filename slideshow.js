@@ -1,5 +1,25 @@
-const NUMBER_SLIDES = 5;
+const GALLERY_CONTAINER = document.querySelector(".gallery-container");
+const THUMBNAIL_CONTAINER = document.querySelector(".thumbnail-container");
+const NUMBER_OF_IMAGES = 5;
+const SCROLL_SPEED = 3;
+const SELECTED_IMAGE = 3;
+
 const SLIDE_DATA = [
+  {
+    title: 'Numbers',
+    images: [
+      'images/1.png',
+      'images/2.png',
+      'images/3.png',
+      'images/4.jpg',
+      'images/5.jpg',
+      'images/6.png',
+      'images/7.png',
+      'images/8.jpg',
+      'images/9.png',
+      'images/10.jpg',
+    ]
+  },
   {
     title: 'Restaurants',
     images: [
@@ -65,15 +85,33 @@ const SLIDE_DATA = [
     ]
   }
 ];
-var currentSlide = 0;
+
+var galleryWidth, thumbnailWidth;  // These get recalculated on resize so they need to be variable
+
 
 /* INIT */
-const init = () => {
+function init() {
   loadTabs(SLIDE_DATA);
-  //loadSlides(0);
-  loadGallery(SLIDE_DATA[currentSlide]);
-};
+  loadThumbnails(SLIDE_DATA[1].images);
+  selectThumbnail(SELECTED_IMAGE);
+}
 init();
+
+/* EVENT LISTENERS */
+document.querySelector(".gallery-container .prev").addEventListener("click", scrollLeft);
+document.querySelector(".gallery-container .next").addEventListener("click", scrollRight);
+
+/* LOADERS */
+function loadThumbnails(images) {
+  updateWidths();
+
+  images.forEach((image) => {
+    THUMBNAIL_CONTAINER.append(createThumbnail(image, thumbnailWidth));
+  });
+
+  // Start with one image off screen
+  THUMBNAIL_CONTAINER.style.left = `-${thumbnailWidth}px`;
+}
 
 /* TABS */
 function loadTabs(data) {
@@ -95,42 +133,57 @@ function loadTabs(data) {
   tabs.firstChild.classList.add("active"); // Make the first tab active
 }
 
-/* GALLERY */
-function loadGallery(data) {
-  const thumbnails = data.images;
-  const galleryUl = document.createElement('ul');
-  var index = 0;
+/* SCROLLING */
+function scrollLeft() {
+  updateWidths();
+  clearActiveThumbnail();
+  THUMBNAIL_CONTAINER.append(document.querySelector(".thumbnail"));
 
-  thumbnails.forEach((thumbnail) => {
-    var t = document.createElement('li');
-    t.classList.add('thumbnail');
-    t.classList.add('fade');
-    t.setAttribute("onclick", `currentSlide(${index + 1})`);
+  var pos = 0;
+  var id = setInterval(frame, 1);
+  function frame() {
+    if (pos >= thumbnailWidth) {
+      clearInterval(id);
+      setActiveThumbnail();
+    } else {
+      pos += SCROLL_SPEED;
+      THUMBNAIL_CONTAINER.style.left = `-${pos}px`;
+    }
+  }
+}
 
-    const img = document.createElement('img');
-    img.classList.add('thumbnail-image');
-    img.src = thumbnail;
-    t.append(img);
-    galleryUl.append(t);
+function scrollRight() {
+  updateWidths();
+  clearActiveThumbnail();
+  THUMBNAIL_CONTAINER.prepend(document.querySelector(".thumbnail:last-child"));
 
-    if (index == 2) t.classList.add('active'); /* !!! Make this dynamic */
+  var pos = -thumbnailWidth * 2;
+  var id = setInterval(frame, 1);
+  function frame() {
+    if (pos >= -thumbnailWidth) {
+      clearInterval(id);
+      setActiveThumbnail();
+    } else {
+      pos += SCROLL_SPEED;
+      THUMBNAIL_CONTAINER.style.left = `${pos}px`;
+    }
+  }
+}
 
-    index++;
-  })
+function clearActiveThumbnail() {
+  const ACTIVE = document.querySelector(".thumbnail.active")
+  if (ACTIVE !== null) ACTIVE.classList.remove("active");
+}
 
-  document.getElementById('thumbnails-list').innerHTML = galleryUl.innerHTML;
-  showSlide(data.images[0]); // Show the first slide in the gallery
-};
+function selectThumbnail(num) {
+  clearActiveThumbnail();
+  document.querySelector(`.thumbnail:nth-child(${num + 1})`).classList.add("active");
+}
 
-
-
-
-
-/* HELPERS */
-
-// Return an array of images
-function getGalleryImages(index) {
-  return SLIDE_DATA[index].images;
+/* SELECTING */
+function thumbnailClickHandler(thumbnail) {
+  selectThumbnail(getPosition(thumbnail));
+  showSlide(thumbnail.dataset.src);
 }
 
 // Show the selected image
@@ -142,135 +195,46 @@ function showSlide(src) {
   slide.innerHTML = img.outerHTML;
 }
 
-
-
-
-
-
-
-
-
-
-/* SLIDES */
-function showSlides(n) {
-  const slides = document.querySelectorAll(".slide");
-  console.log(slides);
-
-  if (n > slides.length) { currentSlide = 1 } //snap to beginning of slideshow
-
-  if (n < 1) { currentSlide = slides.length } //fell off the end, show final slide
-
-  slides.forEach((slide) => {
-    slide.style.display = "none";
-  })
-
-  slides[currentSlide].style.display = "block";
+/* HELPERS */
+function updateWidths() {
+  galleryWidth = getElementWidth('.gallery-container');
+  thumbnailWidth = galleryWidth / NUMBER_OF_IMAGES;
 }
 
-/*function loadGallery(n) {
-
-  // slides.forEach(s => {console.log (s.innerHTML)});
-
-  var slides = [].slice.call(document.querySelectorAll(".myThumbnails"));
-  var len = slides.length;
-  var thumbnails = [];
-  var index = n;
-
-  slides.forEach((slide) => { slide.style.display = "none" });
-
-  console.log("gallery:", { n }) //PRINT OUT
-
-  //1. get array of 5 images
-  if ((n - 3) < 0) {
-    console.log("a");
-    thumbnails = slides.slice(n - 3).concat(slides.slice(0, n + 2));
-  }
-  else if ((n + 2) > len) {
-    console.log("b");
-    thumbnails = slides.slice(n - 3).concat(slides.slice(0, ((n + 1) - (len - 1))));
-  }
-  else {
-    console.log("b");
-    thumbnails = slides.slice((n - 3), (n + 2));
-  }
-
-  index = 0;
-  order = ["one", "two", "three", "four", "five"];
-
-  thumbnails.forEach((thumbnail) => {
-    thumbnail.setAttribute("id", `${order[index]}`);
-    thumbnail.style.display = "block";
-    index++;
-  })
-}
-*/
-
-
-
-
-
-
-
-
-
-
-/* CONTROLS */
-
-/* TAB CONTROLS
-const tabs = document.querySelectorAll('.tab');
-tabs.forEach((tab) => {
-  tab.addEventListener("click", (el) => {
-    var element = el.target;
-    var show = element.dataset.show; // Which show to show
-
-    // Remove previous active class
-    tabs.forEach((tab) => {
-      tab.classList.remove('active');
-    });
-
-    // Update the slideshow
-    currentSlide = 0;
-    loadSlides(show);
-    loadGallery(show);
-
-    // Add the active class
-    element.classList.add('active');
-  })
-});*/
-
-
-// Next/previous controls
-function plusSlides(n) {
-  currentSlide = (currentSlide + n) % document.querySelectorAll(".mySlides").length;
-  var shift = currentSlide
-  showSlides(shift);
-  loadGallery(shift);
+function getElementWidth(selector) {
+  return document.querySelector(selector).offsetWidth;
 }
 
-// Thumbnail image controls
-function currentSlide(n) {
-  currentSlide = n;
-  shift = currentSlide;
-  showSlides(shift);
+function createThumbnail(src, width) {
+  const THUMBNAIL = document.createElement("div");
+  THUMBNAIL.classList.add('thumbnail');
+  THUMBNAIL.style.width = `${width}px`;
+  THUMBNAIL.setAttribute("data-src", src);
+  THUMBNAIL.setAttribute("onClick", 'thumbnailClickHandler(this)');
+
+  const IMG = document.createElement("img");
+  IMG.src = src;
+
+  THUMBNAIL.innerHTML = IMG.outerHTML;
+  return THUMBNAIL;
 }
 
-function scrollL() {
-  var shift = currentSlide - 4;
-  console.log({ shift }, { currentSlide });
-  if (shift < 0) {
-    shift += document.querySelectorAll(".mySlides").length
-  }
-  console.log({ shift }, { currentSlide });
-  loadGallery(currentSlide = shift);
+function setThumbnailSize() {
+  const THUMBNAILS = document.querySelectorAll(".thumbnail");
+
+  updateWidths();
+  THUMBNAILS.forEach((thumbnail) => {
+    thumbnail.style.width = `${thumbnailWidth}px`;
+  });
+  THUMBNAIL_CONTAINER.style.left = `-${thumbnailWidth}px`;
 }
 
-function scrollR() {
-  var shift = currentSlide + 4;
-  var len = document.querySelectorAll(".mySlides").length;
+function getPosition(element) {
+  var i = 0;
+  while ((element = element.previousSibling) != null)
+    i++;
 
-  if (shift > len) {
-    shift -= len;
-  }
-
-  loadGallery(currentSlide = shift);
+  return i;
 }
+
+window.onresize = setThumbnailSize;
