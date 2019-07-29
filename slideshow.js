@@ -2,7 +2,6 @@ const GALLERY_CONTAINER = document.querySelector(".gallery-container");
 const THUMBNAIL_CONTAINER = document.querySelector(".thumbnail-container");
 const NUMBER_OF_IMAGES = 5;
 const SCROLL_SPEED = 3;
-const SELECTED_IMAGE = 3;
 
 const SLIDE_DATA = [
   {
@@ -87,13 +86,13 @@ const SLIDE_DATA = [
 ];
 
 var galleryWidth, thumbnailWidth;  // These get recalculated on resize so they need to be variable
-
+var activeImage = 3;               // This will change when a thumbnail is clicked;
 
 /* INIT */
 function init() {
   loadTabs(SLIDE_DATA);
   loadThumbnails(SLIDE_DATA[1].images);
-  selectThumbnail(SELECTED_IMAGE);
+  selectThumbnail(activeImage);
 }
 init();
 
@@ -133,6 +132,27 @@ function loadTabs(data) {
   tabs.firstChild.classList.add("active"); // Make the first tab active
 }
 
+const TABS = document.querySelectorAll('.tab');
+TABS.forEach((tab) => {
+  tab.addEventListener("click", (el) => {
+    var element = el.target;
+    var show = element.datasetTABS; // Which show to show
+
+    // Remove previous active class
+    TABS.forEach((tab) => {
+      tab.classList.remove('active');
+    });
+
+    // Update the slideshow
+    currentSlide = 0;
+    loadSlides(show);
+    loadGallery(show);
+
+    // Add the active class
+    element.classList.add('active');
+  })
+});
+
 /* SCROLLING */
 function scrollLeft() {
   updateWidths();
@@ -144,7 +164,7 @@ function scrollLeft() {
   function frame() {
     if (pos >= thumbnailWidth) {
       clearInterval(id);
-      setActiveThumbnail();
+      selectThumbnail(activeImage);
     } else {
       pos += SCROLL_SPEED;
       THUMBNAIL_CONTAINER.style.left = `-${pos}px`;
@@ -162,7 +182,7 @@ function scrollRight() {
   function frame() {
     if (pos >= -thumbnailWidth) {
       clearInterval(id);
-      setActiveThumbnail();
+      selectThumbnail(activeImage);
     } else {
       pos += SCROLL_SPEED;
       THUMBNAIL_CONTAINER.style.left = `${pos}px`;
@@ -176,8 +196,15 @@ function clearActiveThumbnail() {
 }
 
 function selectThumbnail(num) {
+  activeImage = num;
   clearActiveThumbnail();
-  document.querySelector(`.thumbnail:nth-child(${num + 1})`).classList.add("active");
+  setActiveThumbnail();
+}
+
+function setActiveThumbnail() {
+  const THUMBNAIL = document.querySelector(`.thumbnail:nth-child(${activeImage + 1})`)
+  THUMBNAIL.classList.add("active");
+  showSlide(THUMBNAIL.dataset.src);
 }
 
 /* SELECTING */

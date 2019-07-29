@@ -10,7 +10,7 @@ const IMAGE_WIDTH = 150;
 const LEFT_SCROLL_POSITION = (GALLERY_CENTER - (IMAGE_WIDTH / 2)); // position to move selected thumbnail to
 const SCROLL_SPEED = .1;
 
-//const NUMBER_SLIDES = 5;
+// const NUMBER_SLIDES = 5;
 const SLIDE_DATA = [
   {
     title: 'Restaurants',
@@ -198,30 +198,45 @@ function showSlide(src) {
 
 
 
-
-
-
-
-
 /* SLIDES
 function showSlides(n) {
   const slides = document.querySelectorAll(".slide");
   console.log(slides);
 
-  if (n > slides.length) { currentSlide = 1 } //snap to beginning of slideshow
+  if (n > slides.length) { currentSlide = 1 } // snap to beginning of slideshow
 
-  if (n < 1) { currentSlide = slides.length } //fell off the end, show final slide
+  if (n < 1) { currentSlide = slides.length } // fell off the end, show final slide
 
   slides.forEach((slide) => {
     slide.style.display = "none";
   })
 
   slides[currentSlide].style.display = "block";
-}*/
+}
 
-/*function loadGallery(n) {
+* Notes
+* This is good, the way this loops works great and the way you set things works well
+* I would suggest rather then setting the styles here in Javascript it might work better
+* to add and remove classes, that way you can change the style, add animation etc. in the css
+* without having to touch the Javascript. This would allow the design to be seperated from the
+* function which I have found is often helpful especially as projects grow.
+*
+* SUGGESTION
+* Variable names - make meaningful whenever possible, only exception I personally use is in a loop
+*                  (var i =0; i>=7; i++) anything else I just give a name. Since in production you
+*                  will want to minify your .js anyways and one of the things minification does to
+*                  save space is rename all variables to simple letters a, b, c etc.
+*
+* Check out this CodePen to see how I might do this
+* https://codepen.io/jessejburton/pen/GVrJMM
 
-  // slides.forEach(s => {console.log (s.innerHTML)});
+*/
+
+
+/*
+function loadGallery(n) {
+
+  //slides.forEach(s => {console.log (s.innerHTML)});
 
   var slides = [].slice.call(document.querySelectorAll(".myThumbnails"));
   var len = slides.length;
@@ -255,7 +270,35 @@ function showSlides(n) {
     index++;
   })
 }
+
+* Notes
+* So to confirm, this function is getting all of the thumbnails and then setting
+* id's on 5 of them based on the number that is passed in?
+*
+* I would also suggest using classes instead of setting properties in this case so
+* you can more easily change multiple properties and animate.
+*
+* Another option to using an ID is to use the data- attribute, this way you can create
+* your own meaningful attributes. data- attributes must be lowercase, so in this case
+* you could use something like data-index="one" and then to access it you would use
+* element.dataset.index. Besides having a more meaningful name it also helps prevent
+* possible issues if the id needs to be used for something else. That being said, the
+* approach you took with using the id's is perfectly valid and will work just fine.
+*
+* The math definitely gets a little confusing in here, I think a simpler approach
+* might be to rearrange the array by shifting it and then re-populating the div with
+* the content.
+*
+* Check out this CodePen to see how I might do this
+* https://codepen.io/jessejburton/pen/QedZYJ
+*
+* I hadn't seen this method for converting a NodeList to an array, very cool!
+* var slides = [].slice.call(document.querySelectorAll(".myThumbnails"));
+*
+
+
 */
+
 
 
 
