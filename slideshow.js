@@ -85,10 +85,12 @@ const SLIDE_DATA = [
   }
 ];
 
-var galleryWidth, thumbnailWidth;  // These get recalculated on resize so they need to be variable
-var activeImage = 3;               // This will change when a thumbnail is clicked;
+let galleryWidth, thumbnailWidth;  // These get recalculated on resize so they need to be variable
+let activeImage = 3;               // This will change when a thumbnail is clicked;
 
-/* INIT */
+/**
+  * @desc Main initializing function
+*/
 function init() {
   loadTabs(SLIDE_DATA);
   loadThumbnails(SLIDE_DATA[1].images);
@@ -101,11 +103,15 @@ document.querySelector(".gallery-container .prev").addEventListener("click", scr
 document.querySelector(".gallery-container .next").addEventListener("click", scrollRight);
 
 /* LOADERS */
+
+/**
+  * @desc Load the thumbnails for a specific gallery
+  * @param string images - an array of image paths
+*/
 function loadThumbnails(images) {
   // images must be the path (not html)
   updateWidths();
-  //clearThumbnails(); //TODO - remove contents of thumbnail-container 
-  console.log(images);
+  clearThumbnails();
 
   images.forEach((image) => {
     THUMBNAIL_CONTAINER.append(createThumbnail(image, thumbnailWidth)); //createThumbnail returns html div object
@@ -115,7 +121,20 @@ function loadThumbnails(images) {
   THUMBNAIL_CONTAINER.style.left = `-${thumbnailWidth}px`;
 }
 
+/**
+  * @desc Clear the contents of .thumbnail-container
+*/
+function clearThumbnails() {
+  //TODO - Go ahead and write this function! Should br pretty simple :)
+  document.querySelector(".thumbnail-container").innerHTML = "";
+}
+
 /* TABS */
+
+/**
+  * @desc Creates the tabs that allow switching between different galleryies
+  * @param array data - An array of objects, each object has a title and an array of images.
+*/
 function loadTabs(data) { //tab position never changes, called only on load
   const tabs = document.getElementById("tabs");
   var index = 0;
@@ -132,33 +151,66 @@ function loadTabs(data) { //tab position never changes, called only on load
     index++;
   });
 
+  addClickToTabs(); // Add the click handlers to the tabs
   tabs.firstChild.classList.add("active"); // Make the first tab active
 }
 
-const TABS = document.querySelectorAll('.tab');
-TABS.forEach((tab) => { //add event listener to tabs, load new set of slides
-  tab.addEventListener("click", (el) => {
-    var element = el.target;
-    var show = element.datasetTABS; // Which show to show
-    console.log("what is: " + show);
+/*
+  There isn't an easy way to add event listeners to dynamically created elements (addEventListener doesn't work, pretty annoying actually!) one approach that I have used is with setAttribute('onclick', function(){});
 
-    // Remove previous active class
-    TABS.forEach((tab) => {
-      tab.classList.remove('active');
-    });
+  This will also need to get called AFTER the elements have been created so you can either put all of this code in a function and call it at the end of the loadTabs function, or you can call it on each tab as it is created in the loadTabs function. Both options are totally valid.
+*/
+function addClickToTabs() {
+  const TABS = document.querySelectorAll('.tab');
 
-    // Update the slideshow - these funtions no longer exist
-    currentSlide = 0;
-    //loadSlides(show); //does not exist
-    //loadGallery(show); //does not exist
+  TABS.forEach((tab) => { //add event listener to tabs, load new set of slides
 
-    //TODO - correct $show must be array of img paths 
-    loadThumbnails(show); // err show not correct input type 
+    const show = tab.dataset.show; // Which show to show
 
-    // Add the active class
-    element.classList.add('active');
-  })
-});
+    tab.setAttribute("onClick", `clickTab(this)`);
+
+  });
+
+  /* PREVIOUS CODE - FOR REVIEW
+  const TABS = document.querySelectorAll('.tab');
+  TABS.forEach((tab) => { //add event listener to tabs, load new set of slides
+    tab.addEventListener("click", (el) => {
+      var element = el.target;
+      var show = element.datasetTABS; // Which show to show
+      console.log("what is: " + show);
+
+      // Remove previous active class
+      //!!! Since there is only one active at a time you can actually select and remove the class just from it. Less Looping.
+      TABS.forEach((tab) => {
+        tab.classList.remove('active');
+      });
+
+      // Update the slideshow - these funtions no longer exist
+      currentSlide = 0;
+      //loadSlides(show); //does not exist
+      //loadGallery(show); //does not exist
+
+      //TODO - correct $show must be array of img paths
+      loadThumbnails(show); // err show not correct input type
+
+      // Add the active class
+      element.classList.add('active');
+    })
+  });
+  */
+
+}
+
+function clickTab(tab) {
+  // Remove existing active class
+  document.querySelector('.tab.active').classList.remove('active');
+
+  // Add the active class
+  tab.classList.add("active");
+
+  // Load the thumbnails
+  loadThumbnails(SLIDE_DATA[tab.dataset.show].images);
+}
 
 /* SCROLLING */
 function scrollLeft() { //onclick function for left gallery button
@@ -186,7 +238,7 @@ function scrollRight() { //onclick funtion  for right gallery button
 
   var pos = -thumbnailWidth * 2;
   var id = setInterval(frame, 1);
-  function frame() { 
+  function frame() {
     if (pos >= -thumbnailWidth) {
       clearInterval(id);
       selectThumbnail(activeImage);
@@ -266,7 +318,7 @@ function setThumbnailSize() { //runs on resize
 function getPosition(element) { //of thumbnail
   var i = 0;
   while ((element = element.previousSibling) != null) // false only if there is no element before
-    i++; // i = position where 0 is first image 
+    i++; // i = position where 0 is first image
 
   return i;
 }
