@@ -22,16 +22,16 @@ const SLIDE_DATA = [
   {
     title: 'Restaurants',
     images: [
-      'slideshow/restaurants/brewers_dining_tv.jpg',
-      'slideshow/restaurants/brewers_entrance_indoor.jpg',
-      'slideshow/restaurants/brewers_entrance_view.jpg',
-      'slideshow/restaurants/mariott_bar.jpg',
-      'slideshow/restaurants/brewers_entrance_outdoor.jpg',
-      'slideshow/restaurants/generic.jpg',
-      'slideshow/restaurants/generic.jpg',
-      'slideshow/restaurants/generic.jpg',
-      'slideshow/restaurants/generic.jpg',
-      'slideshow/restaurants/generic.jpg'
+      'images/restaurants/brewers_dining_tv.jpg',
+      'images/restaurants/brewers_entrance_indoor.jpg',
+      'images/restaurants/brewers_entrance_view.jpg',
+      'images/restaurants/mariott_bar.jpg',
+      'images/restaurants/brewers_entrance_outdoor.jpg',
+      'images/restaurants/generic.jpg',
+      'images/restaurants/generic.jpg',
+      'images/restaurants/generic.jpg',
+      'images/restaurants/generic.jpg',
+      'images/restaurants/generic.jpg'
     ]
   },
   {
@@ -102,10 +102,13 @@ document.querySelector(".gallery-container .next").addEventListener("click", scr
 
 /* LOADERS */
 function loadThumbnails(images) {
+  // images must be the path (not html)
   updateWidths();
+  //clearThumbnails(); //TODO - remove contents of thumbnail-container 
+  console.log(images);
 
   images.forEach((image) => {
-    THUMBNAIL_CONTAINER.append(createThumbnail(image, thumbnailWidth));
+    THUMBNAIL_CONTAINER.append(createThumbnail(image, thumbnailWidth)); //createThumbnail returns html div object
   });
 
   // Start with one image off screen
@@ -113,7 +116,7 @@ function loadThumbnails(images) {
 }
 
 /* TABS */
-function loadTabs(data) {
+function loadTabs(data) { //tab position never changes, called only on load
   const tabs = document.getElementById("tabs");
   var index = 0;
 
@@ -133,20 +136,24 @@ function loadTabs(data) {
 }
 
 const TABS = document.querySelectorAll('.tab');
-TABS.forEach((tab) => {
+TABS.forEach((tab) => { //add event listener to tabs, load new set of slides
   tab.addEventListener("click", (el) => {
     var element = el.target;
     var show = element.datasetTABS; // Which show to show
+    console.log("what is: " + show);
 
     // Remove previous active class
     TABS.forEach((tab) => {
       tab.classList.remove('active');
     });
 
-    // Update the slideshow
+    // Update the slideshow - these funtions no longer exist
     currentSlide = 0;
-    loadSlides(show);
-    loadGallery(show);
+    //loadSlides(show); //does not exist
+    //loadGallery(show); //does not exist
+
+    //TODO - correct $show must be array of img paths 
+    loadThumbnails(show); // err show not correct input type 
 
     // Add the active class
     element.classList.add('active');
@@ -154,10 +161,10 @@ TABS.forEach((tab) => {
 });
 
 /* SCROLLING */
-function scrollLeft() {
+function scrollLeft() { //onclick function for left gallery button
   updateWidths();
   clearActiveThumbnail();
-  THUMBNAIL_CONTAINER.append(document.querySelector(".thumbnail"));
+  THUMBNAIL_CONTAINER.append(document.querySelector(".thumbnail")); //querySelector returns first result, so first thumbnail in list moves to end
 
   var pos = 0;
   var id = setInterval(frame, 1);
@@ -172,14 +179,14 @@ function scrollLeft() {
   }
 }
 
-function scrollRight() {
+function scrollRight() { //onclick funtion  for right gallery button
   updateWidths();
   clearActiveThumbnail();
-  THUMBNAIL_CONTAINER.prepend(document.querySelector(".thumbnail:last-child"));
+  THUMBNAIL_CONTAINER.prepend(document.querySelector(".thumbnail:last-child")); //moves last html div in list to first position - ready to be the next leftmost image
 
   var pos = -thumbnailWidth * 2;
   var id = setInterval(frame, 1);
-  function frame() {
+  function frame() { 
     if (pos >= -thumbnailWidth) {
       clearInterval(id);
       selectThumbnail(activeImage);
@@ -190,31 +197,31 @@ function scrollRight() {
   }
 }
 
-function clearActiveThumbnail() {
+function clearActiveThumbnail() { //removes html class "active"
   const ACTIVE = document.querySelector(".thumbnail.active")
   if (ACTIVE !== null) ACTIVE.classList.remove("active");
 }
 
-function selectThumbnail(num) {
+function selectThumbnail(num) { //sets global var activeImage, changes slide and thumbnail position with helper functions
   activeImage = num;
   clearActiveThumbnail();
   setActiveThumbnail();
 }
 
-function setActiveThumbnail() {
+function setActiveThumbnail() { //adds html class active to thumbnail matching activeImage index
   const THUMBNAIL = document.querySelector(`.thumbnail:nth-child(${activeImage + 1})`)
   THUMBNAIL.classList.add("active");
   showSlide(THUMBNAIL.dataset.src);
 }
 
 /* SELECTING */
-function thumbnailClickHandler(thumbnail) {
+function thumbnailClickHandler(thumbnail) { //onclick function attached to each thumbnail html div. helper funcs changes slide/gallery position
   selectThumbnail(getPosition(thumbnail));
   showSlide(thumbnail.dataset.src);
 }
 
 // Show the selected image
-function showSlide(src) {
+function showSlide(src) { //called when the image is changed
   const slide = document.getElementById('slide');
   const img = document.createElement('img');
   img.src = src;
@@ -232,7 +239,7 @@ function getElementWidth(selector) {
   return document.querySelector(selector).offsetWidth;
 }
 
-function createThumbnail(src, width) {
+function createThumbnail(src, width) { //loop each img - should be called on load, and each time project tab is changed
   const THUMBNAIL = document.createElement("div");
   THUMBNAIL.classList.add('thumbnail');
   THUMBNAIL.style.width = `${width}px`;
@@ -243,10 +250,10 @@ function createThumbnail(src, width) {
   IMG.src = src;
 
   THUMBNAIL.innerHTML = IMG.outerHTML;
-  return THUMBNAIL;
+  return THUMBNAIL; //returns html div
 }
 
-function setThumbnailSize() {
+function setThumbnailSize() { //runs on resize
   const THUMBNAILS = document.querySelectorAll(".thumbnail");
 
   updateWidths();
@@ -256,10 +263,10 @@ function setThumbnailSize() {
   THUMBNAIL_CONTAINER.style.left = `-${thumbnailWidth}px`;
 }
 
-function getPosition(element) {
+function getPosition(element) { //of thumbnail
   var i = 0;
-  while ((element = element.previousSibling) != null)
-    i++;
+  while ((element = element.previousSibling) != null) // false only if there is no element before
+    i++; // i = position where 0 is first image 
 
   return i;
 }
