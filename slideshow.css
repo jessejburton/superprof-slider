@@ -135,6 +135,7 @@ body {
   transition: all .3s ease;
   cursor: pointer;
   filter: grayscale(1);
+  z-index: 10;
 }
 
 .thumbnail-container .thumbnail:hover {
@@ -154,6 +155,7 @@ body {
 .thumbnail-container .thumbnail.active {
   transform: scale(1.3);
   filter: grayscale(0);
+  z-index: 14;
 }
 
 /* ANIMATIONS */

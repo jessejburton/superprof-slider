@@ -209,7 +209,11 @@ function clickTab(tab) {
   tab.classList.add("active");
 
   // Load the thumbnails
-  loadThumbnails(SLIDE_DATA[tab.dataset.show].images);
+  const IMAGES = SLIDE_DATA[tab.dataset.show].images
+
+  loadThumbnails(IMAGES);
+  // Select the active thumbnail (lowest between the activeImage or the number of images).
+  selectThumbnail(Math.min(activeImage, IMAGES.length - 1));
 }
 
 /* SCROLLING */
