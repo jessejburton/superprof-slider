@@ -2,6 +2,7 @@ const GALLERY_CONTAINER = document.querySelector(".gallery-container");
 const THUMBNAIL_CONTAINER = document.querySelector(".thumbnail-container");
 const NUMBER_OF_IMAGES = 5;
 const SCROLL_SPEED = 3;
+const IMAGE_FOLDER = '/wp-content/themes/twentynineteen-child/slider/';
 
 const SLIDE_DATA = [
   {
@@ -297,13 +298,15 @@ function getElementWidth(selector) {
 
 function createThumbnail(src, width) { //loop each img - should be called on load, and each time project tab is changed
   const THUMBNAIL = document.createElement("div");
+  const SRC = `${IMAGE_FOLDER}/${src}`;
+
   THUMBNAIL.classList.add('thumbnail');
   THUMBNAIL.style.width = `${width}px`;
-  THUMBNAIL.setAttribute("data-src", src);
+  THUMBNAIL.setAttribute("data-src", SRC);
   THUMBNAIL.setAttribute("onClick", 'thumbnailClickHandler(this)');
 
   const IMG = document.createElement("img");
-  IMG.src = src;
+  IMG.src = SRC;
 
   THUMBNAIL.innerHTML = IMG.outerHTML;
   return THUMBNAIL; //returns html div
