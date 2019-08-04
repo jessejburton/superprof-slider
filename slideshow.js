@@ -3,11 +3,12 @@ const THUMBNAIL_CONTAINER = document.querySelector(".thumbnail-container");
 const NUMBER_OF_IMAGES = 5;
 const SCROLL_SPEED = 3;
 
-if (VARIABLES) {
-  const IMAGE_FOLDER = VARIABLES.templateUrl + '/slider/';
+if (VARIABLES !== 'undefined') {
+  imagePath = VARIABLES.templateUrl + '/slider/';
 } else {
-  const IMAGE_FOLDER = '/';
+  imagePath = '/';
 }
+const IMAGE_FOLDER = imagePath;
 
 const SLIDE_DATA = [
   {
