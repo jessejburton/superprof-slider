@@ -2,7 +2,10 @@ const GALLERY_CONTAINER = document.querySelector(".gallery-container");
 const THUMBNAIL_CONTAINER = document.querySelector(".thumbnail-container");
 const NUMBER_OF_IMAGES = 5;
 const SCROLL_SPEED = 3;
-const IMAGE_FOLDER = '/wp-content/themes/twentynineteen-child/slider/';
+const IMAGE_FOLDER = VARIABLES.templateUrl + '/slider/' || '/';
+
+alert(IMAGE_FOLDER);
+
 
 const SLIDE_DATA = [
   {
@@ -331,3 +334,4 @@ function getPosition(element) { //of thumbnail
 }
 
 window.onresize = setThumbnailSize;
+
