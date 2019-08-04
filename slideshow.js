@@ -4,7 +4,9 @@ const NUMBER_OF_IMAGES = 5;
 const SCROLL_SPEED = 3;
 
 if (VARIABLES) {
-  const IMAGE_FOLDER = VARIABLES.templateUrl + '/slider/' || '/';
+  const IMAGE_FOLDER = VARIABLES.templateUrl + '/slider/';
+} else {
+  const IMAGE_FOLDER = '/';
 }
 
 const SLIDE_DATA = [
